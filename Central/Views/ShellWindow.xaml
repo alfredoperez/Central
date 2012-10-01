@@ -1,0 +1,153 @@
+﻿<elysium:Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:inf="clr-namespace:Central.Infrastructure.Models;assembly=Central.Infrastructure"
+		xmlns:prism="http://www.codeplex.com/prism"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:elysium="http://schemas.codeplex.com/elysium/theme"
+		xmlns:avalonDock="http://avalondock.codeplex.com"
+		xmlns:Converters="clr-namespace:Central.Infrastructure.AvalonDock.Converters;assembly=Central.Infrastructure"
+		xmlns:avalonDockInfrastructure="clr-namespace:Central.Infrastructure.AvalonDock;assembly=Central.Infrastructure"
+		xmlns:regAdapters="clr-namespace:Central.Infrastructure.RegionAdapters;assembly=Central.Infrastructure"
+				mc:Ignorable="d" x:Class="Central.Views.ShellWindow" x:Name="mainWindow"
+
+		Title="" Height="Auto" Width="679" MinWidth="300" MinHeight="300"
+		WindowStartupLocation="CenterScreen" AllowsTransparency="False" IsManipulationEnabled="False" Icon="/Central;component/Views/Images/Central.png">
+    <elysium:Window.Resources>
+        <avalonDock:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter"/>
+    </elysium:Window.Resources>
+    <Border>
+        <Grid x:Name="LayoutRoot" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" MinHeight="11"  />
+            </Grid.RowDefinitions>
+            <!--<Border x:Name="Header" Style="{StaticResource HeaderBorderStyle}" HorizontalAlignment="Left" Margin="8,-26,0,0" BorderThickness="0,0,0,0"  >-->
+            <Grid x:Name="ApplicationTitle" HorizontalAlignment="Stretch" Margin="8,-26,0,0" Height="25" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="110" />
+                </Grid.ColumnDefinitions>
+                <Viewbox x:Name="NodesImage">
+                    <Grid>
+                        <Grid x:Name="backgroundGrid" Width="48" Height="48" Visibility="Collapsed" />
+                        <Path Data="M5.9442482,39.851C9.2254944,39.851 11.887001,42.515145 11.887001,45.7964 11.887001,49.077756 9.2254944,51.738001 5.9442482,51.738001 2.6602631,51.738001 0,49.077756 0,45.7964 0,42.515145 2.6602631,39.851 5.9442482,39.851z M54.571699,39.574002C59.779954,39.574002 64,43.792891 64,49.000002 64,54.207113 59.779954,58.426003 54.571699,58.426003 49.365844,58.426003 45.146999,54.207113 45.146999,49.000002 45.146999,43.792891 49.365844,39.574002 54.571699,39.574002z M17.059084,38.473003L17.907999,39.9143 13.223015,42.668002 12.374001,41.226706z M36.32003,38.019001L44.646997,42.765482 43.087067,45.504003 34.763999,40.757521z M26.5662,26.613002C31.077789,26.613002 34.738,30.273369 34.738,34.789052 34.738,39.300835 31.077789,42.961002 26.5662,42.961002 22.05341,42.961002 18.391998,39.300835 18.391998,34.789052 18.391998,30.273369 22.05341,26.613002 26.5662,26.613002z M25.125999,18.207001L28.005999,18.207001 28.005999,25.313002 25.125999,25.313002z M26.5662,0C31.077789,0 34.738,3.6602287 34.738,8.1759319 34.738,12.687735 31.077789,16.348001 26.5662,16.348001 22.05341,16.348001 18.391998,12.687735 18.391998,8.1759319 18.391998,3.6602287 22.05341,0 26.5662,0z" Stretch="Uniform" Fill="#FF0062AA" Width="48" Height="48" Margin="0,0,0,0">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="0" />
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                </Viewbox>
+                <TextBlock x:Name="ApplicationNameTextBlock" Style="{StaticResource ApplicationNameStyle}" FontSize="22"
+						   Text=" Central" FontFamily="Segoe UI" Grid.Column="1" HorizontalAlignment="Left" Margin="-3,-2,0,0" Foreground="#FF004578"/>
+                <TextBlock x:Name="UserNameTextBlock" Style="{StaticResource ContentTextStyle}" FontSize="14"
+						  FontFamily="Segoe UI" Text="{Binding UserName}" Grid.Column="2" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+            </Grid>
+            <Menu Grid.Row ="1" IsMainMenu="True" Style="{StaticResource MenuMetroStyle}"   x:Name="mainMenu" VerticalAlignment="Top" Margin="0" BorderThickness="0" >
+                <MenuItem Header="_Tools" FontSize="14" Style="{StaticResource MetroMenuItem}">
+                    <ContentControl x:Name="UtilitiesMenuRegion" prism:RegionManager.RegionName="{x:Static inf:RegionNames.ToolsMenuRegion}"/>
+                    <MenuItem Header="Load" Command="{Binding LoadLayoutCommand, ElementName=mainWindow}" Style="{StaticResource MetroMenuItem}"/>
+                    <MenuItem Header="Save" Command="{Binding SaveLayoutCommand, ElementName=mainWindow}" Style="{StaticResource MetroMenuItem}"/>
+                </MenuItem>
+                <ContentControl x:Name="MainMenuRegion" prism:RegionManager.RegionName="{x:Static inf:RegionNames.MainMenuRegion}" />
+
+                <MenuItem Header="_Help" FontSize="14" Style="{StaticResource MetroMenuItem}" HorizontalAlignment="Left" Margin="0" Padding="-10,1,-20,1"/>
+            </Menu>
+            <Border Grid.Row="2" HorizontalAlignment="Left" Margin="0,0,0,0" >
+                <ItemsControl  x:Name="ToolbarRegion" prism:RegionManager.RegionName="{x:Static inf:RegionNames.ToolBarRegion}"  >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Border>
+            <avalonDock:DockingManager x:Name="dockManager"   Grid.Row="3"
+									   DocumentsSource="{Binding Documents}"
+									   AnchorablesSource="{Binding Tools}"
+									   ActiveContent="{Binding ActiveDocument, Converter={StaticResource ActiveDocumentConverter}, Mode=TwoWay}"
+									   Grid.RowSpan="1" Width="Auto" Height="Auto" Margin="0,0,0,4"
+									   prism:RegionManager.RegionName="{x:Static inf:RegionNames.AvalonDocumentRegion}">
+                <avalonDock:DockingManager.Theme>
+                    <avalonDock:VS2010Theme/>
+                </avalonDock:DockingManager.Theme>
+                <avalonDock:DockingManager.LayoutItemTemplateSelector>
+                    <avalonDockInfrastructure:PanesTemplateSelector>
+                        <avalonDockInfrastructure:PanesTemplateSelector.DocumentViewTemplate>
+                            <DataTemplate x:Name="DocumentTemplate">
+                                <!--<ContentControl  x:Name="AvalonDocumentRegion" prism:RegionManager.RegionName="{x:Static inf:RegionNames.AvalonDocumentRegion}"  />-->
+                            </DataTemplate>
+                        </avalonDockInfrastructure:PanesTemplateSelector.DocumentViewTemplate>
+                        <avalonDockInfrastructure:PanesTemplateSelector.AnchorableViewTemplate>
+                            <DataTemplate>
+                                <ContentControl  x:Name="AvalonAnchorableRegion" prism:RegionManager.RegionName="{x:Static inf:RegionNames.AvalonAnchorableRegion}"  />
+                            </DataTemplate>
+                        </avalonDockInfrastructure:PanesTemplateSelector.AnchorableViewTemplate>
+                    </avalonDockInfrastructure:PanesTemplateSelector>
+                </avalonDock:DockingManager.LayoutItemTemplateSelector>
+                <avalonDock:DockingManager.LayoutItemContainerStyleSelector>
+                    <avalonDockInfrastructure:PanesStyleSelector>
+                        <avalonDockInfrastructure:PanesStyleSelector.AnchorableStyle>
+                            <Style TargetType="{x:Type avalonDock:LayoutItem}">
+                                <Setter Property="Title" Value="{Binding Model.Title}"/>
+                                <Setter Property="IconSource" Value="{Binding Model.IconSource}"/>
+                                <Setter Property="Visibility" Value="{Binding Model.IsVisible, ConverterParameter={x:Static Visibility.Hidden}, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}"/>
+                                <Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+                            </Style>
+                        </avalonDockInfrastructure:PanesStyleSelector.AnchorableStyle>
+                        <avalonDockInfrastructure:PanesStyleSelector.DocumentStyle>
+                            <Style TargetType="{x:Type avalonDock:LayoutItem}">
+                                <Setter Property="Title" Value="{Binding Model.Title}"/>
+                                <Setter Property="ToolTip" Value="{Binding Model.FilePath}"/>
+                                <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}"/>
+                                <Setter Property="IconSource" Value="{Binding Model.IconSource}"/>
+                                <Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+                            </Style>
+                        </avalonDockInfrastructure:PanesStyleSelector.DocumentStyle>
+                    </avalonDockInfrastructure:PanesStyleSelector>
+                </avalonDock:DockingManager.LayoutItemContainerStyleSelector>
+                <avalonDock:LayoutRoot >
+                    <avalonDock:LayoutPanel>
+                        <avalonDock:LayoutDocumentPane>
+                            <!--<avalonDock:LayoutDocument regAdapters:AvalonDockRegion.Name="{x:Static inf:RegionNames.AvalonDocumentRegion}"/>-->
+                        </avalonDock:LayoutDocumentPane>
+                        <avalonDock:LayoutAnchorablePane >
+                            <avalonDock:LayoutAnchorable  regAdapters:AvalonDockRegion.Name="{x:Static inf:RegionNames.AvalonAnchorableRegion}"/>
+                        </avalonDock:LayoutAnchorablePane>
+                    </avalonDock:LayoutPanel>
+                </avalonDock:LayoutRoot>
+            </avalonDock:DockingManager>
+            <StatusBar Grid.Row="4"  Background="{StaticResource CentralBackground}">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="Auto" MaxWidth="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem>
+                    <TextBlock x:Name="StatusBarText" Foreground="White">Ready</TextBlock>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2">
+                    <elysium:LinearProgressBar  State="Busy" Width="80" Height="18" />
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+    </Border>
+</elysium:Window>
